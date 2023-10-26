@@ -63,8 +63,9 @@ npm run dev
 - [dotenv](https://www.npmjs.com/package/dotenv) for loading environment variables from .env file
 - [mariadb](https://www.npmjs.com/package/mariadb) for handling connection to MariaDB database
 - [sequelize](https://www.npmjs.com/package/sequelize) ORM for handling db CRUD operations
-- [morgan-body](https://www.npmjs.com/package/morgan-body) to log requests and responses
-- [nodemon](https://www.npmjs.com/package/nodemon) auto-restart the node application when changes are made and saved to files - Dev environment
+- [express-session](https://www.npmjs.com/package/express-session) for handling sessions
+- [passport](https://www.npmjs.com/package/passport) for handling authentication
+- [passport-local](https://www.npmjs.com/package/passport-local) for handling local authentication
 
 ## Improvements
 

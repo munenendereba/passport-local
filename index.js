@@ -1,33 +1,49 @@
-import express from "express";
-import session from "express-session";
-import passport from "passport";
-import LocalStrategy from "passport-local";
-import { configDotenv } from "dotenv";
-
+import express, { urlencoded } from "express";
 const app = express();
 
-app.use(express.urlencoded({ extended: false }));
+import session from "express-session";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
 
-app.set("view engine", "ejs");
+app.use(urlencoded({ extended: false }));
 
-configDotenv();
-
+//Middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "secret",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 
-app.use(passport.session());
+app.use(passport.session()); //allow passport to use "express-session"
 
-const authenticateUser = (username, password, done) => {
-  const user = { id: "123", username: "user1" };
-
-  return done(null, user);
+const authUser = (user, password, done) => {
+  //Search the user, password in the DB to authenticate the user
+  //Let's assume that a search within your DB returned the username and password match for "isaac".
+  let authenticated_user = { id: 123, username: "isaac" };
+  return done(null, authenticated_user);
 };
 
+passport.use(new LocalStrategy(authUser));
+
+passport.serializeUser((userObj, done) => {
+  done(null, userObj);
+});
+
+passport.deserializeUser((userObj, done) => {
+  done(null, userObj);
+});
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
+  })
+);
+
+//we check if not authenticated and redirect to login page
 const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -36,50 +52,29 @@ const checkAuthenticated = (req, res, next) => {
   res.redirect("/login");
 };
 
+app.get("/dashboard", checkAuthenticated, (req, res) => {
+  res.render("dashboard.ejs", { username: req.user.username });
+});
+
 const checkLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return res.redirect("/");
+    return res.redirect("/dashboard");
   }
-
   next();
 };
 
-passport.use(new LocalStrategy(authenticateUser));
-
-passport.serializeUser((user, done) => {
-  done(null, user.username);
+app.get("/", (req, res) => {
+  res.redirect("/dashboard");
 });
-
-passport.deserializeUser((username, done) => {
-  const user = { id: "123", username: "user1" };
-
-  done(null, user);
-});
-
-app.get("/", checkAuthenticated, (req, res) => {
-  res.render("home.ejs");
-});
-
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-);
 
 app.get("/login", checkLoggedIn, (req, res) => {
   res.render("login.ejs");
 });
 
-app.get("/logout", (req, res) => {
+app.post("/logout", (req, res) => {
   req.logOut();
   res.redirect("/login");
-  console.log("User logged out.");
+  console.log(`-------> User Logged out`);
 });
 
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
-
-app.listen(SERVER_PORT, () => {
-  console.log(`Server started on port ${SERVER_PORT}`);
-});
+app.listen(3001, () => console.log(`Server started on port 3001...`));
