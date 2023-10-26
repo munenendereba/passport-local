@@ -8,6 +8,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 
+app.set("view engine", "ejs");
+
 configDotenv();
 
 app.use(
@@ -55,7 +57,7 @@ passport.deserializeUser((username, done) => {
 });
 
 app.get("/", checkAuthenticated, (req, res) => {
-  res.status(200).send("Welcome home!");
+  res.render("home.ejs");
 });
 
 app.post(
@@ -67,7 +69,7 @@ app.post(
 );
 
 app.get("/login", checkLoggedIn, (req, res) => {
-  res.status(200).send("Login page");
+  res.render("login.ejs");
 });
 
 app.get("/logout", (req, res) => {
