@@ -1,0 +1,12 @@
+{
+  "name": "passport-local",
+  "version": "1.0.0",
+  "description": "The information is not easily searchable especially if you are on mobile.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Munene Ndereba",
+  "license": "MIT"
+}
