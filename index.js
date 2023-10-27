@@ -65,9 +65,19 @@ app.get("/login", checkLoggedIn, (req, res) => {
   res.render("login.ejs");
 });
 
-app.post("/logout", (req, res) => {
-  req.logOut();
-  res.redirect("/login");
+app.get("/logout", (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err);
+    res.redirect("/login");
+  });
+});
+
+app.post("/logout", (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err);
+    res.redirect("/login");
+  });
+
   console.log(`-------> User Logged out`);
 });
 
