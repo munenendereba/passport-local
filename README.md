@@ -96,4 +96,4 @@ This project is licensed under the MIT License.
 
 ## References and Acknowledgments
 
-- []()
+- Inspired by the [Medim Post](https://medium.com/@prashantramnyc/node-js-with-passport-authentication-simplified-76ca65ee91e5)

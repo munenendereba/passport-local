@@ -4,6 +4,7 @@ const app = express();
 import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { authUser } from "./auth.js";
 
 app.use(urlencoded({ extended: false }));
 
@@ -17,13 +18,6 @@ app.use(
 );
 
 app.use(passport.session()); //allow passport to use "express-session"
-
-const authUser = (user, password, done) => {
-  //Search the user, password in the DB to authenticate the user
-  //Let's assume that a search within your DB returned the username and password match for "isaac".
-  let authenticated_user = { id: 123, username: "isaac" };
-  return done(null, authenticated_user);
-};
 
 passport.use(new LocalStrategy(authUser));
 
